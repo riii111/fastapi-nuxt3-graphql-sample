@@ -1,0 +1,27 @@
+services:
+  backend:
+    command: >
+      bash -c "/app/start-reload.sh"
+    volumes:
+      - ./backend:/app:cached
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=debug
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=P@ssw0rd
+      - SECRET_KEY=m3zRzTuue1olawCiMJmlKjm7bylxcJVmn1D3+V0snyw1
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+      - REFRESH_TOKEN_EXPIRE_MINUTES=10080
+      - PEPPER=vHR23rHYJhnbu5A5
+
+  mongo:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=P@ssw0rd
+    volumes:
+      - ./mongo_dev:/data/db
+
+  mongoexpress:
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=P@ssw0rd

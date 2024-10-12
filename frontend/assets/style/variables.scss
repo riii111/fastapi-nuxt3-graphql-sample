@@ -1,0 +1,11 @@
+@forward 'vuetify/settings' with (
+  $color-pack: false,
+  $body-font-family: Noto Sans JP,
+  $button-height: 32px,
+  $button-plain-opacity: 1,
+  $border-color-root: #DCDDE5,
+  $field-focused-border-width: 1px,
+
+  // VTooltip
+  $tooltip-background-color: #5A5A5A
+);

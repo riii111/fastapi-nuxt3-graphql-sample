@@ -1,0 +1,12 @@
+{
+  "extends": "stylelint-config-standard",
+  "customSyntax": "postcss-html",
+  "rules": {
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": ["v-bind"]
+      }
+    ]
+  }
+}

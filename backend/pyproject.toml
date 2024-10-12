@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["ryota.tamura"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.100.0"
+uvicorn = "^0.21.1"
+pymongo = "^4.3.3"
+bcrypt = "^4.0.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+pydantic = {extras = ["email"], version = "^2.0.2"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+boto3 = "^1.26.115"
+python-multipart = "^0.0.6"
+pydantic-settings = "^2.0.2"
+aiohttp = "^3.8.5"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "23.3.0"
+isort = "5.10.1"
+bump-pydantic = "^0.6.0"
+pre-commit = "^3.3.3"
+flake8 = "6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

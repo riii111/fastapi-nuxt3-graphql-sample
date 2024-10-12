@@ -1,0 +1,37 @@
+services:
+  backend:
+    image: "backend:${TAG-latest}"
+    links:
+      - mongo
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 30020:8000
+    environment:
+      MONGO_INITDB_DATABASE: app
+      LOGCONFIG: ./logging.conf
+      LOG_LEVEL: info
+      WORKERS: 1
+    tty: true
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:5.0
+    environment:
+      MONGO_INITDB_DATABASE: app
+    ports:
+      - 30030:27017
+    tty: true
+    restart: unless-stopped
+
+  mongoexpress:
+    image: mongo-express:0.54
+    links:
+      - mongo
+    ports:
+      - 30040:8081
+    environment:
+      VCAP_APP_HOST: "0.0.0.0"
+      ME_CONFIG_SITE_BASEURL: "/mongoexpress"
+    restart: unless-stopped
