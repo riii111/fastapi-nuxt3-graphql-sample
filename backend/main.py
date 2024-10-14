@@ -3,6 +3,8 @@ from config import app_config
 from db.session import client
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from strawberry.fastapi import GraphQLRouter
+from schema import schema
 
 app = FastAPI(
     title="Sample API",
@@ -18,6 +20,10 @@ app.add_middleware(
 )
 
 app.include_router(v1.api_router, prefix=app_config.API_V1)
+
+# GraphQL用のルータを追加
+graphql_app = GraphQLRouter(schema)
+app.include_router(graphql_app, prefix="/graphql")
 
 
 @app.on_event("shutdown")

@@ -17,6 +17,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 boto3 = "^1.26.115"
 python-multipart = "^0.0.9"
 pydantic-settings = "^2.0.2"
+strawberry-graphql = {extras = ["fastapi"], version = "^0.246.1"}
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"
