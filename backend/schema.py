@@ -43,19 +43,15 @@ class Query:
     @strawberry.field
     async def books(self) -> List[Book]:
         book_repo = BookRepository(client.db)
-        results: list[BookView] = await book_repo.find_many()
-        books = [
-            Book(
-                id=str(book.id),
-                name=book.name,
-                price_without_tax=book.price_without_tax,
-                tax_rate=book.tax_rate,
-                price_with_tax=book.price_with_tax,
-                created_at=book.created_at.isoformat(),
-                updated_at=book.updated_at.isoformat(),
-            )
-            for book in results
-        ]
-        return books
 
 schema = strawberry.Schema(query=Query)
+        book_usecase = BookUseCase(book_repo)
+        results = await book_usecase.get_all_books()
+        return [Book.from_pydantic(book) for book in results]
+
+    @strawberry.field
+    async def book(self, id: str) -> Book:
+        book_repo = BookRepository(client.db)
+        book_usecase = BookUseCase(book_repo)
+        result = await book_usecase.get_book_by_id(id)
+        return Book.from_pydantic(result)
