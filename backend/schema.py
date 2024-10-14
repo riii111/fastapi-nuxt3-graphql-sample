@@ -1,20 +1,37 @@
 import strawberry
 from typing import List
-from models.core import PyObjectId
 from repositories.book import BookRepository
-from models.book import BookView
 from db.session import client
+from usecases.book import BookUseCase
+from models.core import PyObjectId
 
 
-@strawberry.type
+# PyObjectIdをGraphQLで使用するため、カスタムスカラー型として定義
+@strawberry.scalar(
+    description="Custom scalar for MongoDB ObjectId",
+    serialize=str,
+    parse_value=PyObjectId,
+)
+class ObjectIdScalar:
+    @staticmethod
+    def serialize(value: PyObjectId) -> str:
+        return str(value)
+
+    @staticmethod
+    def parse_value(value: str) -> PyObjectId:
+        return PyObjectId(value)
+
+
+# Pydanticのモデルをstrawberryの型に変換するためのクラス
+@strawberry.experimental.pydantic.type(model=BookView)
 class Book:
-    id: str
-    name: str
-    price_without_tax: int
-    tax_rate: float
-    price_with_tax: int
-    created_at: str
-    updated_at: str
+    id: ObjectIdScalar
+
+    @classmethod
+    def from_pydantic(cls, pydantic_model: BookView) -> "Book":
+        book_dict = pydantic_model.dict()
+        book_dict["id"] = ObjectIdScalar.serialize(pydantic_model.id)
+        return cls(**book_dict)
 
 
 @strawberry.type
