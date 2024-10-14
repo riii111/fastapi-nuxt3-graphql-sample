@@ -1,5 +1,8 @@
 # GraphQL memo
 
+## GUI
+http://localhost:30020/graphql
+
 ## ざっくりメモ
 
 - **クエリ (Query)**<br/>
