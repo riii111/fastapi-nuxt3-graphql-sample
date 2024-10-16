@@ -11,26 +11,28 @@ GraphQL、REST併用することを想定しているので、usecaseやmodel、
 
 ```mermaid
 graph TD
-    Client[Client] -->|GraphQL Query/Mutation| Router[GraphQL Router]
-    Router -->|Executes| Schema["Schema (Query or Mutation)"]
-    Schema -->|Defines & Resolves| Resolvers[Resolvers]
+    Client[Client] -->|GraphQL Query| Router[GraphQL Router]
+    Router -->|Executes| Schema["Federation Schema (Query)"]
+    Schema -->|Defines & Resolves| Query[Query]
+    Query -->|Resolves| Resolvers[Resolvers]
     Resolvers -->|Uses| Context[GraphQL Context]
     Context -->|Depends on| BookUseCase[Book UseCase]
     BookUseCase -->|Uses| BookRepository[Book Repository]
     BookRepository -->|Accesses| Database[(Database)]
     
-    Resolvers -->|Returns| BookType[BookType]
-    BookType -->|Defined in| Types[Types]
-    Types -->|Uses| Scalars[Scalars]
+    Resolvers -->|Returns| BookViewType[BookViewType]
+    BookViewType -->|Defined in| Types[Types]
+    Types -->|Uses| PyObjectIdType[PyObjectIdType]
     
     subgraph "GraphQL Layer"
         Router
         Schema
+        Query
         Resolvers
         Context
-        BookType
+        BookViewType
         Types
-        Scalars
+        PyObjectIdType
     end
     
     subgraph "Business Logic Layer"
@@ -43,19 +45,21 @@ graph TD
     
     subgraph "Models"
         BookView[BookView Model]
+        PyObjectId[PyObjectId Model]
     end
     
-    BookType -.->|Maps to| BookView
+    BookViewType -.->|Maps to| BookView
+    PyObjectIdType -.->|Serializes| PyObjectId
     
     classDef graphql fill:#e6f3ff,stroke:#333,stroke-width:2px,color:#000;
     classDef business fill:#fff2cc,stroke:#333,stroke-width:2px,color:#000;
     classDef data fill:#e6ffee,stroke:#333,stroke-width:2px,color:#000;
     classDef model fill:#ffe6e6,stroke:#333,stroke-width:2px,color:#000;
     
-    class Router,Schema,Resolvers,Context,BookType,Types,Scalars graphql;
+    class Router,Schema,Query,Resolvers,Context,BookViewType,Types,PyObjectIdType graphql;
     class BookUseCase business;
     class BookRepository data;
-    class BookView model;
+    class BookView,PyObjectId model;
 
     linkStyle default fill:none,stroke:#333,stroke-width:2px;
 ```
