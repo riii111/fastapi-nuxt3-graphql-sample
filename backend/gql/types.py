@@ -1,18 +1,12 @@
 import strawberry
-from strawberry import auto, field
 from models.book import BookView
-from .scalars import ObjectIdScalar
+from models.core import PyObjectId
+
+# PyObjectIdをスカラー型としてシリアライズ
+PyObjectIdType = strawberry.scalar(PyObjectId, serialize=str, parse_value=PyObjectId)
 
 
-@strawberry.experimental.pydantic.type(model=BookView)
-class BookType:
-    id: ObjectIdScalar
-    name: auto
-    price_without_tax: auto
-    tax_rate: auto
-    created_time: auto
-    updated_time: auto
-
-    @field
-    def price_with_tax(self) -> int:
-        return int(self.price_without_tax * (1.0 + self.tax_rate))
+# PydanticのモデルをGraphQLの型に変換
+@strawberry.experimental.pydantic.type(model=BookView, all_fields=True)
+class BookViewType:
+    pass
