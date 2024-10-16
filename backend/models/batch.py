@@ -34,7 +34,7 @@ class HTTPRequest(HTTPBase):
         if parse_result.hostname:
             raise InvalidArgumentException(f"url: {val} にホスト名は不要です。")
         if not val.startswith("/"):
-            raise InvalidArgumentException(f"url は/から始めてください。")
+            raise InvalidArgumentException("url は/から始めてください。")
         return val
 
 

@@ -1,7 +1,9 @@
 from typing import List
+
 from strawberry.types import Info
-from .types import BookViewType
+
 from .context import GraphQLContext
+from .types import BookViewType
 
 
 async def get_books(info: Info[GraphQLContext, None]) -> List[BookViewType]:

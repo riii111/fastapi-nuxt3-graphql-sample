@@ -1,5 +1,5 @@
+from models.book import BookCreate, BookView, UpdateBookRequest
 from models.core import PyObjectId
-from models.book import BookView, BookCreate, UpdateBookRequest
 from repositories.book import BookRepository
 
 
