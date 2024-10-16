@@ -3,7 +3,7 @@ from config import app_config
 from db.session import client
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from gql.schema import graphql_app
+from gql.router import graphql_app
 
 app = FastAPI(
     title="Sample API",
