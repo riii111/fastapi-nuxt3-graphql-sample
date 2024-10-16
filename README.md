@@ -1,7 +1,63 @@
 # GraphQL memo
 
 ## GUI
-http://localhost:30020/graphql
+
+<http://localhost:30020/graphql>
+
+## GraphQLのフロー
+
+GraphQL、REST併用することを想定しているので、usecaseやmodel、repositoryを経由する。
+
+```mermaid
+graph TD
+    Client[Client] -->|GraphQL Query/Mutation| Router[GraphQL Router]
+    Router -->|Executes| Schema["Schema (Query or Mutation)"]
+    Schema -->|Defines & Resolves| Resolvers[Resolvers]
+    Resolvers -->|Uses| Context[GraphQL Context]
+    Context -->|Depends on| BookUseCase[Book UseCase]
+    BookUseCase -->|Uses| BookRepository[Book Repository]
+    BookRepository -->|Accesses| Database[(Database)]
+    
+    Resolvers -->|Returns| BookType[BookType]
+    BookType -->|Defined in| Types[Types]
+    Types -->|Uses| Scalars[Scalars]
+    
+    subgraph "GraphQL Layer"
+        Router
+        Schema
+        Resolvers
+        Context
+        BookType
+        Types
+        Scalars
+    end
+    
+    subgraph "Business Logic Layer"
+        BookUseCase
+    end
+    
+    subgraph "Data Access Layer"
+        BookRepository
+    end
+    
+    subgraph "Models"
+        BookView[BookView Model]
+    end
+    
+    BookType -.->|Maps to| BookView
+    
+    classDef graphql fill:#e6f3ff,stroke:#333,stroke-width:2px,color:#000;
+    classDef business fill:#fff2cc,stroke:#333,stroke-width:2px,color:#000;
+    classDef data fill:#e6ffee,stroke:#333,stroke-width:2px,color:#000;
+    classDef model fill:#ffe6e6,stroke:#333,stroke-width:2px,color:#000;
+    
+    class Router,Schema,Resolvers,Context,BookType,Types,Scalars graphql;
+    class BookUseCase business;
+    class BookRepository data;
+    class BookView model;
+
+    linkStyle default fill:none,stroke:#333,stroke-width:2px;
+```
 
 ## ざっくりメモ
 
