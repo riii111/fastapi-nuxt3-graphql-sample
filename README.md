@@ -64,6 +64,16 @@ graph TD
     linkStyle default fill:none,stroke:#333,stroke-width:2px;
 ```
 
+## 動作確認例
+- books一覧を取得する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/a1053ac2-4b66-453d-a72b-58b0944f8dfb">
+
+
+- 対象のIDのbookを取得する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/15f82b11-168d-44f5-a8d4-7b2a467c6a47">
+
+
+
 ## ざっくりメモ
 
 - **クエリ (Query)**<br/>
