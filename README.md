@@ -7,6 +7,7 @@
 ## GraphQLのフロー
 
 GraphQL、REST併用することを想定しているので、usecaseやmodel、repositoryを経由する。
+"Book"に対してQuery/Mutationを行う場合のフロー。
 
 ```mermaid
 graph TD
