@@ -4,7 +4,6 @@ from db.session import client
 from repositories.book import BookRepository
 from usecases.book import BookUseCase
 from fastapi import Depends
-from starlette.requests import Request
 
 
 class GraphQLContext(BaseContext):
@@ -19,7 +18,6 @@ async def get_book_usecase() -> AsyncGenerator[BookUseCase, None]:
 
 
 async def get_context(
-    request: Request,
     book_usecase: BookUseCase = Depends(get_book_usecase),
 ) -> GraphQLContext:
     return GraphQLContext(book_usecase=book_usecase)
