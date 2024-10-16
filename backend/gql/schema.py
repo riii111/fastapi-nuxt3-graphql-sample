@@ -1,11 +1,11 @@
 import strawberry
-from typing import List
-from repositories.book import BookRepository
+from typing import List, Any
 from models.book import BookView
-from db.session import client
-from usecases.book import BookUseCase
 from models.core import PyObjectId
 from strawberry import auto, field
+from strawberry.types import Info
+from strawberry.fastapi import GraphQLRouter
+from .context import get_context, GraphQLContext
 
 
 # PyObjectIdをGraphQLで使用するため、カスタムスカラー型として定義
@@ -46,10 +46,8 @@ class Query:
         return "Hello World"
 
     @strawberry.field
-    async def books(self) -> List[Book]:
-        book_repo = BookRepository(client.db)
-        book_usecase = BookUseCase(book_repo)
-        results = await book_usecase.get_all_books()
+    async def books(self, info: Info[GraphQLContext, Any]) -> List[Book]:
+        results = await info.context.book_usecase.get_all_books()
         return [
             BookView(**{**book.model_dump(exclude={"secret"}), "_id": book.id})
             for book in results
@@ -57,3 +55,5 @@ class Query:
 
 
 schema = strawberry.Schema(query=Query)
+
+graphql_app = GraphQLRouter(schema, context_getter=get_context)
