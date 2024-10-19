@@ -65,13 +65,20 @@ graph TD
 ```
 
 ## 動作確認例
-- books一覧を取得する場合
-<img width="1624" alt="image" src="https://github.com/user-attachments/assets/a1053ac2-4b66-453d-a72b-58b0944f8dfb">
+### books一覧を取得する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/af6b548b-5149-4a97-9c49-8c2b69660ed3">
 
-
-- 対象のIDのbookを取得する場合
+### 対象のIDのbookを取得する場合
 <img width="1624" alt="image" src="https://github.com/user-attachments/assets/15f82b11-168d-44f5-a8d4-7b2a467c6a47">
 
+### 新しいbookを作成する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/b2219d06-bfc6-414f-b9e0-58e6bb9a2825">
+
+### bookを更新する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/042a7a61-4e26-45d1-8f71-88713a61bc5f">
+
+### bookを削除する場合
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/41597ad8-61bd-456e-98d4-8c9463c4b66b">
 
 
 ## ざっくりメモ
