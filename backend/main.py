@@ -5,7 +5,7 @@ from db.session import client
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from gql.context import get_context
-from gql.router import Query
+from gql.router import Mutation, Query
 from gql.types import PyObjectIdType
 from models.core import PyObjectId
 from strawberry.fastapi import GraphQLRouter
@@ -28,6 +28,7 @@ app.include_router(v1.api_router, prefix=app_config.API_V1)
 # GraphQL用のルータを追加
 schema = strawberry.federation.Schema(
     query=Query,
+    mutation=Mutation,
     enable_federation_2=True,
     scalar_overrides={PyObjectId: PyObjectIdType},
 )

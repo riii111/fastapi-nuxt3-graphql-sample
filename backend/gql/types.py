@@ -20,4 +20,12 @@ class ListBookResponseType:
     def counts(self) -> int:
         return len(self.books)
 
+
+@strawberry.experimental.pydantic.input(model=CreateBookRequest, all_fields=True)
+class CreateBookInput:
+    pass
+
+
+@strawberry.experimental.pydantic.input(model=UpdateBookRequest, all_fields=True)
+class UpdateBookInput:
     pass
