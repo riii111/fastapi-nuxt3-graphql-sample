@@ -1,7 +1,13 @@
 import strawberry
 
-from .resolvers import create_book, delete_book, get_book_by_id, get_books, update_book
-from .types import BookViewType, ListBookResponseType
+from .resolvers.books import (
+    create_book,
+    delete_book,
+    get_book_by_id,
+    get_books,
+    update_book,
+)
+from gql.types.books import BookViewType, ListBookResponseType
 
 
 # Queryのルーティング

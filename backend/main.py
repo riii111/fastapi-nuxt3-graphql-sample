@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from gql.context import get_context
 from gql.router import Mutation, Query
-from gql.types import PyObjectIdType
+from backend.gql.types.books import PyObjectIdType
 from models.core import PyObjectId
 from strawberry.fastapi import GraphQLRouter
 
