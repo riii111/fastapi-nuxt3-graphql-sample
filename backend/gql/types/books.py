@@ -1,21 +1,18 @@
 import strawberry
-from models.book import BookView, CreateBookRequest, ListBookResponse, UpdateBookRequest
-from models.core import PyObjectId
-
-# PyObjectIdをスカラー型としてシリアライズ
-PyObjectIdType = strawberry.scalar(PyObjectId, serialize=str, parse_value=PyObjectId)
+from models.book import CreateBookRequest, UpdateBookRequest
+from api.schema.book import ListBookResponse, BookResponse
 
 
 # PydanticのモデルをGraphQLの型に変換
-@strawberry.experimental.pydantic.type(model=BookView, all_fields=True)
-class BookViewType:
+@strawberry.experimental.pydantic.type(model=BookResponse, all_fields=True)
+class BookType:
     @strawberry.field
     def price_with_tax(self) -> int:
-        return self.price_with_tax
+        return int(self.price_without_tax * (1.0 + self.tax_rate))
 
 
 @strawberry.experimental.pydantic.type(model=ListBookResponse, all_fields=True)
-class ListBookResponseType:
+class ListBookType:
     @strawberry.field
     def counts(self) -> int:
         return len(self.books)

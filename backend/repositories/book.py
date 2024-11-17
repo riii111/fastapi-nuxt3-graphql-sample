@@ -1,56 +1,55 @@
 from models.book import BOOK_COLLECTION, BookCreate, BookInDB, UpdateBookRequest
 from models.core import PyObjectId
+from db.session import get_db
 from pymongo.cursor import Cursor
 from pymongo.database import Database
-from repositories.base import BaseRepository
 
 COLLECTION_NAME = BOOK_COLLECTION
 
 
-class BookRepository(BaseRepository):
+class BookRepository:
     def __init__(self, db: Database) -> None:
-        super().__init__(db)
+        self.db: Database = get_db()
+        self.collection = self.db["documents"]
 
-    async def find_many(self, *, limit: None | int, offset: int = 0) -> list[BookInDB]:
-        result_iter: Cursor = super().find_many(
-            collection_name=COLLECTION_NAME,
-            offset=offset,
-            limit=limit,
-        )
-        return [BookInDB(**result) for result in result_iter]
-
-    async def find_one_filter_by_id(self, *, _id: PyObjectId) -> BookInDB | None:
-        result: dict | None = super().find_one_filter_by_id(
-            collection_name=COLLECTION_NAME,
-            _id=_id,
-        )
-        return BookInDB(**result) if result else None
-
-    async def create_one(
+    async def find_many(
         self,
         *,
-        book: BookCreate,
-    ) -> PyObjectId:
-        created_id: PyObjectId = super().insert_one(
-            collection_name=COLLECTION_NAME,
-            insert_dict=book.model_dump(),
-        )
-        return created_id
+        limit: int | None = None,
+        offset: int = 0,
+        filter_: dict = {},
+        sorts: list[tuple[str, int]] = [("created_at", 1)],
+    ) -> list[BookInDB]:
+        cursor: Cursor = self.collection.find(filter=filter_, sort=sorts).skip(offset)
+        if limit is not None and limit > 0:
+            cursor = cursor.limit(limit)
+        return [BookInDB(**book) for book in cursor]
 
-    async def update_one_filter_by_id(
-        self,
-        *,
-        book: UpdateBookRequest,
-        _id: PyObjectId,
-    ) -> None:
-        update_dict: dict = super().get_update_dict(model=book)
-        super().update_one_filter_by_id(
-            collection_name=COLLECTION_NAME, _id=_id, update_dict=update_dict
-        )
+    async def find_one(self, *, filter_: dict) -> BookInDB | None:
+        book = self.collection.find_one(filter_)
+        return BookInDB(**book) if book else None
 
-    async def delete_one_filter_by_id(
+    async def insert_one(self, *, book: BookCreate) -> BookInDB:
+        result = self.collection.insert_one(book.model_dump())
+        created_book = await self.find_one(filter_={"_id": result.inserted_id})
+        if not created_book:
+            raise InternalException("ドキュメントの作成に失敗しました")
+        return created_book
+
+    async def update_one(self, *, filter_: dict, update: UpdateBookRequest) -> BookInDB:
+        result = self.collection.update_one(filter_, {"$set": update.model_dump()})
+        if result.modified_count == 0:
+            raise InternalException("ドキュメントの更新に失敗しました")
+        updated_book = await self.find_one(filter_=filter_)
+        if not updated_book:
+            raise InternalException("更新後のドキュメントの取得に失敗しました")
+        return updated_book
+
+    async def delete_one(
         self,
         *,
         _id: PyObjectId,
     ) -> None:
-        super().delete_one_filter_by_id(collection_name=COLLECTION_NAME, _id=_id)
+        result = self.collection.delete_one({"_id": _id})
+        if result.deleted_count == 0:
+            raise InternalException("ドキュメントの削除に失敗しました")

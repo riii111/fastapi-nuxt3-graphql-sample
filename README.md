@@ -22,8 +22,8 @@ graph TD
     BookUseCase -->|Uses| BookRepository[Book Repository]
     BookRepository -->|Accesses| Database[(Database)]
     
-    Resolvers -->|Returns| BookViewType[BookViewType]
-    BookViewType -->|Defined in| Types[Types]
+    Resolvers -->|Returns| BookType[BookType]
+    BookType -->|Defined in| Types[Types]
     Types -->|Uses| PyObjectIdType[PyObjectIdType]
     
     subgraph "GraphQL Layer"
@@ -32,7 +32,7 @@ graph TD
         Query
         Resolvers
         Context
-        BookViewType
+        BookType
         Types
         PyObjectIdType
     end
@@ -46,11 +46,11 @@ graph TD
     end
     
     subgraph "Models"
-        BookView[BookView Model]
+        Book[Book Model]
         PyObjectId[PyObjectId Model]
     end
     
-    BookViewType -.->|Maps to| BookView
+    BookType -.->|Maps to| BookResponse
     PyObjectIdType -.->|Serializes| PyObjectId
     
     classDef graphql fill:#e6f3ff,stroke:#333,stroke-width:2px,color:#000;
@@ -58,30 +58,35 @@ graph TD
     classDef data fill:#e6ffee,stroke:#333,stroke-width:2px,color:#000;
     classDef model fill:#ffe6e6,stroke:#333,stroke-width:2px,color:#000;
     
-    class Router,Schema,Query,Resolvers,Context,BookViewType,Types,PyObjectIdType graphql;
+    class Router,Schema,Query,Resolvers,Context,BookType,Types,PyObjectIdType graphql;
     class BookUseCase business;
     class BookRepository data;
-    class BookView,PyObjectId model;
+    class BookResponse,PyObjectId model;
 
     linkStyle default fill:none,stroke:#333,stroke-width:2px;
 ```
 
 ## 動作確認例
+
 ### books一覧を取得する場合
+
 <img width="1624" alt="image" src="https://github.com/user-attachments/assets/af6b548b-5149-4a97-9c49-8c2b69660ed3">
 
 ### 対象のIDのbookを取得する場合
+
 <img width="1624" alt="image" src="https://github.com/user-attachments/assets/15f82b11-168d-44f5-a8d4-7b2a467c6a47">
 
 ### 新しいbookを作成する場合
+
 <img width="1624" alt="image" src="https://github.com/user-attachments/assets/b2219d06-bfc6-414f-b9e0-58e6bb9a2825">
 
 ### bookを更新する場合
+
 <img width="1624" alt="image" src="https://github.com/user-attachments/assets/042a7a61-4e26-45d1-8f71-88713a61bc5f">
 
 ### bookを削除する場合
-<img width="1624" alt="image" src="https://github.com/user-attachments/assets/41597ad8-61bd-456e-98d4-8c9463c4b66b">
 
+<img width="1624" alt="image" src="https://github.com/user-attachments/assets/41597ad8-61bd-456e-98d4-8c9463c4b66b">
 
 ## ざっくりメモ
 
