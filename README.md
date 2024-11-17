@@ -1,3 +1,5 @@
+※RESTとGraphQLを併用できる形で実装。
+
 # GraphQL memo
 
 ## GUI
